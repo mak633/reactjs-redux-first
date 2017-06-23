@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-import './styles/base.less';
 export default class App extends React.Component {
   render() {
         return (

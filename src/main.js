@@ -10,7 +10,24 @@ import {
 } from 'react-router-dom';
 import App from './App.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { createStore } from 'redux';
 
+function playlist(state = [], action){
+  if(action.type === "ADD_TRACK"){
+    return [
+      ...state,
+      action.payload
+    ]
+  }
+  return state;
+}
+
+const store = createStore(playlist);
+store.subscribe(() => {
+   console.log('subscribe', store.getState());
+});
+store.dispatch({ type: "ADD_TRACK", payload: "Smells"});
+store.dispatch({ type: "ADD_TRACK", payload: "Funny"});
 
 function renderApp() {
   ReactDOM.render(
