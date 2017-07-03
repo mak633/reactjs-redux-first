@@ -9,37 +9,34 @@ import {
   Redirect
 } from 'react-router-dom';
 import App from './App.jsx';
+import { Provider } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 
-function playlist(state = [], action){
-  if(action.type === "ADD_TRACK"){
-    return [
-      ...state,
-      action.payload
-    ]
-  }
-  return state;
-}
+import reducer from './reducers';
 
-const store = createStore(playlist);
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 store.subscribe(() => {
    console.log('subscribe', store.getState());
 });
-store.dispatch({ type: "ADD_TRACK", payload: "Smells"});
-store.dispatch({ type: "ADD_TRACK", payload: "Funny"});
+
 
 function renderApp() {
   ReactDOM.render(
     <HashRouter>
-      <Switch>
-        <MuiThemeProvider>
-        <div className='App'>
-            <Route exact path='/' component={App}/>
-        </div>
-        </MuiThemeProvider>
-      </Switch>
+      <Provider store={store}>
+        <Switch>
+          <MuiThemeProvider>
+          <div className='App'>
+              <Route exact path='/' component={App}/>
+          </div>
+          </MuiThemeProvider>
+        </Switch>
+      </Provider>
     </HashRouter>,
       document.getElementById('mount-point')
   );
 }
+renderApp();
